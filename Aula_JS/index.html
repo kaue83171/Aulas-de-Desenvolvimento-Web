@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - Prática de JavaScript</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>TechStore - Equipamentos e Periféricos</h1>
+    </header>
+
+    <main class="container">
+        <section class="vitrine">
+            <h2>Catálogo de Produtos</h2>
+            <!-- A listagem de produtos será injetada dinamicamente pelo JavaScript nesta div -->
+            <div id="lista-produtos" class="grid-produtos">
+
+                
+            </div>
+        </section>
+
+        <aside class="painel-carrinho">
+            <h2>Resumo da Compra</h2>
+            <p id="total-carrinho">Total: R$ 0.00</p>
+            
+            <div class="cupom-container">
+                <input type="text" id="input-cupom" placeholder="Código de desconto (ex: PROMO10)">
+                <button id="btn-cupom">Aplicar Cupom</button>
+            </div>
+        </aside>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
