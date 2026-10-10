@@ -1,4 +1,5 @@
-// 1. Tipos Estruturais e Constantes (ES6+)[cite: 14, 15]
+﻿
+// 1. Tipos Estruturais e Constantes (ES6+)
 const produtosBase = [
 { id: 1, nome: 'Placa de Vídeo RTX 4060', preco: 2500, categoria: 'Hardware' },
 { id: 2, nome: 'Teclado Mecânico Switch Blue', preco: 350, categoria: 'Periféricos' },
@@ -6,10 +7,9 @@ const produtosBase = [
 ];
 
 
-// 2. Operador Spread (...)[cite: 20]
+// 2. Operador Spread (...)
 // Simulando a adição de um novo produto ao catálogo mantendo a imutabilidade do array original.
-const produtos = [...produtosBase, { id: 4, nome: 'Mouse Ultra Leve', preco: 150, categoria:
-'Periféricos' }];
+const produtos = [...produtosBase, { id: 4, nome: 'Mouse Ultra Leve', preco: 150, categoria: 'Periféricos' }];
 
 // 3. Closures (Escopo Léxico)
 // Utilizado para encapsular o estado do carrinho, impedindo modificações diretas de fora.
@@ -17,7 +17,7 @@ function gerenciarCarrinho() {
 let itens = []; // Variável protegida pelo escopo
 return {
 adicionar: (produto) => {
-itens = [...itens, produto]; // Spread array destructuring[cite: 19, 20]
+itens = [...itens, produto]; // Spread array destructuring
 salvarNoStorage(itens);
 console.log(`${produto.nome} adicionado!`);
 },
@@ -31,22 +31,22 @@ listar: () => itens
 }
 const carrinho = gerenciarCarrinho();
 
-// 4. Web Storage API[cite: 8]
+// 4. Web Storage API
 // Persistência de dados locais para não perder o carrinho ao atualizar a página.
 const salvarNoStorage = (dados) => {
 localStorage.setItem('carrinho_loja', JSON.stringify(dados));
 };
 
-// 5. O Document Object Model (DOM) e Destructuring[cite: 6, 19]
+// 5. O Document Object Model (DOM) e Destructuring
 function renderizarProdutos() {
 // Selecionando o elemento principal via DOM
 
 const container = document.getElementById('lista-produtos');
 // Iteradores Modernos (for...of)
 for (const produto of produtos) {
-// Destructuring Assignment para extrair propriedades de forma concisa[cite: 19]
+// Destructuring Assignment para extrair propriedades de forma concisa
 const { id, nome, preco } = produto;
-// Manipulação dinâmica via scripts[cite: 6]
+// Manipulação dinâmica via scripts
 const div = document.createElement('div');
 div.classList.add('produto-card');
 div.innerHTML = `
@@ -55,7 +55,7 @@ div.innerHTML = `
 <button id="btn-${id}">Adicionar ao Carrinho</button>
 `;
 container.appendChild(div);
-// Ouvindo eventos[cite: 6]
+// Ouvindo eventos
 document.getElementById(`btn-${id}`).addEventListener('click', () => {
 carrinho.adicionar(produto);
 atualizarInterfaceCarrinho();
@@ -64,41 +64,39 @@ atualizarInterfaceCarrinho();
 }
 function atualizarInterfaceCarrinho() {
 const painelTotal = document.querySelector('#total-carrinho');
-painelTotal.textContent = `Total: R$ ${carrinho.obterTotal().toFixed(2)}`; // Arrow function de
-retorno implícito[cite: 16]
+painelTotal.textContent = `Total: R$ ${carrinho.obterTotal().toFixed(2)}`;
 }
 
-// 6. Operador Rest (...)[cite: 20]
+// 6. Operador Rest (...)
 // Condensa múltiplos valores de frete passados como argumento em um único array.
 const calcularFrete = (...taxas) => {
 return taxas.reduce((total, taxa) => total + taxa, 0);
 };
 
-// 7. Async / Await e Fetch API[cite: 8, 25]
-// Simulação de requisição HTTP assíncrona para buscar um cupom de desconto[cite: 24].
+// 7. Async / Await e Fetch API
+// Simulação de requisição HTTP assíncrona para buscar um cupom de desconto.
 async function validarCupom(codigo) {
 try {
 console.log('Buscando validação no servidor...');
-// Simulação de Fetch em uma API real[cite: 8]
+// Simulação de Fetch em uma API real
 // const resposta = await fetch(`https://api.loja.com/cupons/${codigo}`);
-// const dados = await resposta.json();[cite: 24]
-// Simulando atraso de rede (Web APIs / Task Queue)[cite: 7]
+// const dados = await resposta.json();
+// Simulando atraso de rede (Web APIs / Task Queue)
 await new Promise(resolve => setTimeout(resolve, 1000));
 
 if (codigo === 'PROMO10') {
 const desconto = 0.10;
 const novoTotal = carrinho.obterTotal() * (1 - desconto);
-document.querySelector('#total-carrinho').textContent = `Total c/ Desconto: R$ $
-{novoTotal.toFixed(2)}`;
+document.querySelector('#total-carrinho').textContent = `Total c/ Desconto: R$ ${novoTotal.toFixed(2)}`;
 alert('Cupom aplicado com sucesso!');
 } else {
 throw new Error('Cupom inválido ou expirado.'); // Cai direto no catch
 }
 } catch (erro) {
-console.error('Falha na requisição:', erro.message);[cite: 25]
+console.error('Falha na requisição:', erro.message);
 alert(erro.message);
 } finally {
-console.log('Operação de cupom finalizada.');[cite: 24]
+console.log('Operação de cupom finalizada.');
 }
 }
 // Inicialização da Loja
@@ -110,3 +108,6 @@ const codigoInput = document.getElementById('input-cupom').value;
 validarCupom(codigoInput);
 });
 });
+
+
+
