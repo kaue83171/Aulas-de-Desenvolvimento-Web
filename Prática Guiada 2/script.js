@@ -31,7 +31,7 @@ function renderizarDeshboard(listaservidores) {
         pCPU.textContent = "CPU: " + cargaCPU + "%";
 
         const badge =document.createElement("span");
-        badge.textContent = status === "Online" ? "ONLINE" : "OFFLINE";
+        badge.textContent = status === "online" ? "ONLINE" : "OFFLINE";
 
         //mostra o card e coloca na tela
         card.appendChild(titulo);
