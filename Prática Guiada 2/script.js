@@ -25,7 +25,7 @@ function renderizarDeshboard(listaservidores) {
         titulo.textContent = nome;
 
         const pSO = document.createElement('p');
-        pSo.textContent = "SO: " + so;
+        pSO.textContent = "SO: " + so;
 
         const pCPU = document.createElement('p');
         pCPU.textContent = "CPU: " + cargaCPU + "%";
@@ -38,8 +38,7 @@ function renderizarDeshboard(listaservidores) {
         card.appendChild(pSO);
         card.appendChild(pCPU);
         card.appendChild(badge);
-        card.appendChild(card);
+        grid.appendChild(card);
     }
 }
-
-renderizarservidores(servidores);
+renderizarDeshboard(servidores);
