@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOC - Monitoramento de Infraestrutura</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+<div>
+<h1>Painel NOC </h1>
+<p id="ultima-atualizacao">Aguardando sincronização...</p>
+</div>
+<div class="filtros">
+<button id="btn-todos">Todos</button>
+<button id="btn-online">Operacionais</button>
+<button id="btn-offline">Falhas</button>
+</div>
+</header>
+<main class="container">
+<div id="grid-servidores" class="grid">
+<!-- Cards injetados via JavaScript -->
+</div>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
