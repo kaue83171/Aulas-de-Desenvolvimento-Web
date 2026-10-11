@@ -109,4 +109,3 @@ document.addEventListener("DOMContentLoaded", () =>{
     buscarAtualizaçoes();               //primeira sincronização inicial
     setInterval(buscarAtualizaçoes, 2000);       
 })
-    
