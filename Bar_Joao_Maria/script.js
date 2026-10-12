@@ -12,19 +12,19 @@ const CHAVES = {
 
 // Cardápio inicial (só é usado na primeira vez que o sistema abre)
 const produtosPadrao = [
-  { id: 1,  categoria: 'Cervejas',    nome: 'Cerveja Pilsen 600ml',   preco: 12.00 },
-  { id: 2,  categoria: 'Porções',     nome: 'Porção de Fritas',       preco: 25.00 },
-  { id: 3,  categoria: 'Cervejas',    nome: 'Cerveja Long Neck',      preco: 8.50 },
-  { id: 4,  categoria: 'Cervejas',    nome: 'Chopp 400ml',            preco: 9.00 },
-  { id: 5,  categoria: 'Cervejas',    nome: 'Cerveja Artesanal IPA',  preco: 18.00 },
-  { id: 6,  categoria: 'Porções',     nome: 'Calabresa Acebolada',    preco: 32.00 },
-  { id: 7,  categoria: 'Porções',     nome: 'Isca de Peixe',          preco: 38.00 },
-  { id: 8,  categoria: 'Porções',     nome: 'Pastel (6 unidades)',    preco: 22.00 },
-  { id: 9,  categoria: 'Drinks',      nome: 'Caipirinha',             preco: 16.00 },
-  { id: 10, categoria: 'Drinks',      nome: 'Gin Tônica',             preco: 22.00 },
-  { id: 11, categoria: 'Drinks',      nome: 'Batida de Maracujá',     preco: 18.00 },
-  { id: 12, categoria: 'Sem álcool',  nome: 'Refrigerante Lata',      preco: 6.00 },
-  { id: 13, categoria: 'Sem álcool',  nome: 'Água Mineral',           preco: 4.00 }
+  { id: 1,  categoria: 'Cervejas',   nome: 'Cerveja Pilsen 600ml',  preco: 12.00, imagem: 'img/cerveja-pilsen.svg' },
+  { id: 2,  categoria: 'Porções',    nome: 'Porção de Fritas',      preco: 25.00, imagem: 'img/fritas.svg' },
+  { id: 3,  categoria: 'Cervejas',   nome: 'Cerveja Long Neck',     preco: 8.50,  imagem: 'img/long-neck.svg' },
+  { id: 4,  categoria: 'Cervejas',   nome: 'Chopp 400ml',           preco: 9.00,  imagem: 'img/chopp.svg' },
+  { id: 5,  categoria: 'Cervejas',   nome: 'Cerveja Artesanal IPA', preco: 18.00, imagem: 'img/cerveja-ipa.svg' },
+  { id: 6,  categoria: 'Porções',    nome: 'Calabresa Acebolada',   preco: 32.00, imagem: 'img/calabresa.svg' },
+  { id: 7,  categoria: 'Porções',    nome: 'Isca de Peixe',         preco: 38.00, imagem: 'img/isca-peixe.svg' },
+  { id: 8,  categoria: 'Porções',    nome: 'Pastel (6 unidades)',   preco: 22.00, imagem: 'img/pastel.svg' },
+  { id: 9,  categoria: 'Drinks',     nome: 'Caipirinha',            preco: 16.00, imagem: 'img/caipirinha.svg' },
+  { id: 10, categoria: 'Drinks',     nome: 'Gin Tônica',            preco: 22.00, imagem: 'img/gin-tonica.svg' },
+  { id: 11, categoria: 'Drinks',     nome: 'Batida de Maracujá',    preco: 18.00, imagem: 'img/batida-maracuja.svg' },
+  { id: 12, categoria: 'Sem álcool', nome: 'Refrigerante Lata',     preco: 6.00,  imagem: 'img/refrigerante.svg' },
+  { id: 13, categoria: 'Sem álcool', nome: 'Água Mineral',          preco: 4.00,  imagem: 'img/agua.svg' }
 ];
 
 // Lê um valor do localStorage (ou devolve o padrão se não existir / der erro)
@@ -52,6 +52,18 @@ let produtos = lerStorage(CHAVES.produtos, null);
 if (!Array.isArray(produtos) || produtos.length === 0) {
   produtos = produtosPadrao;
   salvarStorage(CHAVES.produtos, produtos);
+} else {
+  // Cardápios salvos antes das imagens existirem não têm o campo "imagem":
+  // completamos com a imagem do cardápio padrão (pelo id do produto).
+  let atualizou = false;
+  produtos = produtos.map((produto) => {
+    if (produto.imagem) return produto;
+    const padrao = produtosPadrao.find((p) => p.id === produto.id);
+    if (!padrao) return produto;
+    atualizou = true;
+    return { ...produto, imagem: padrao.imagem };
+  });
+  if (atualizou) salvarStorage(CHAVES.produtos, produtos);
 }
 
 // carrinho: [{ id, quantidade }]  (mantém só itens que ainda existem no cardápio)
@@ -88,6 +100,28 @@ function buscarProduto(id) {
   return produtos.find((produto) => produto.id === id);
 }
 
+// Transforma "Sem álcool" em "sem-alcool" (usado para dar uma cor a cada categoria)
+function criarSlug(texto) {
+  return texto
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-');
+}
+
+// Cria o <img> de um produto. Se o arquivo não existir, a imagem some sem quebrar a tela.
+function criarImagemProduto(produto, classe) {
+  if (!produto.imagem) return null;
+
+  const imagem = document.createElement('img');
+  imagem.classList.add(classe);
+  imagem.src = produto.imagem;
+  imagem.alt = '';
+  imagem.loading = 'lazy';
+  imagem.addEventListener('error', () => imagem.remove());
+  return imagem;
+}
+
 function calcularTotal() {
   const soma = carrinho.reduce((total, item) => {
     const produto = buscarProduto(item.id);
@@ -108,6 +142,8 @@ const elTotalComanda = document.getElementById('total-comanda');
 const elTotalBarra = document.getElementById('total-barra');
 const elBtnFechar = document.getElementById('btn-fechar');
 const elTotalFiado = document.getElementById('total-fiado');
+const elContagem = document.getElementById('qtd-itens');
+const elContagemBarra = document.getElementById('qtd-barra');
 
 const elModalFechamento = document.getElementById('modal-fechamento');
 const elTotalFechamento = document.getElementById('total-fechamento');
@@ -139,6 +175,7 @@ function renderizarCardapio() {
   for (const categoria of categorias) {
     const secao = document.createElement('section');
     secao.classList.add('categoria');
+    secao.dataset.categoria = criarSlug(categoria);
 
     const titulo = document.createElement('h3');
     titulo.textContent = categoria;
@@ -153,6 +190,12 @@ function renderizarCardapio() {
 
       const cartao = document.createElement('article');
       cartao.classList.add('produto');
+
+      // Área da foto/desenho do produto
+      const foto = document.createElement('div');
+      foto.classList.add('produto__foto');
+      const imagem = criarImagemProduto(produto, 'produto__imagem');
+      if (imagem) foto.appendChild(imagem);
 
       const info = document.createElement('div');
 
@@ -173,7 +216,7 @@ function renderizarCardapio() {
       botao.setAttribute('aria-label', `Adicionar ${nome} à comanda`);
       botao.addEventListener('click', () => adicionarAoCarrinho(id));
 
-      cartao.append(info, botao);
+      cartao.append(foto, info, botao);
       grade.appendChild(cartao);
     }
 
@@ -202,6 +245,7 @@ function adicionarAoCarrinho(id) {
 
   salvarCarrinho();
   renderizarComanda();
+  animarContador();
 }
 
 // delta = +1 ou -1. Se a quantidade chegar a zero, o item sai da comanda.
@@ -281,6 +325,9 @@ function renderizarComanda() {
     remover.classList.add('mini--remover');
 
     controles.append(menos, qtd, mais, remover);
+    const miniatura = criarImagemProduto(produto, 'item__imagem');
+    if (miniatura) linha.appendChild(miniatura);
+
     linha.append(nome, subtotal, controles);
     elListaComanda.appendChild(linha);
   }
@@ -289,6 +336,22 @@ function renderizarComanda() {
   elTotalComanda.textContent = total;
   elTotalBarra.textContent = total;
   elBtnFechar.disabled = carrinho.length === 0;
+
+  // Número de itens em cima do ícone do carrinho (some quando a comanda está vazia)
+  const totalItens = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
+  for (const contador of [elContagem, elContagemBarra]) {
+    contador.textContent = totalItens;
+    contador.hidden = totalItens === 0;
+  }
+}
+
+// Dá uma "puladinha" no contador quando um item é adicionado
+function animarContador() {
+  for (const contador of [elContagem, elContagemBarra]) {
+    contador.classList.remove('pulo');
+    void contador.offsetWidth; // força o navegador a reiniciar a animação
+    contador.classList.add('pulo');
+  }
 }
 
 

@@ -10,8 +10,11 @@
 
   <header class="topo">
     <div class="marca">
-      <h1>Bar João &amp; Maria</h1>
-      <p>Caixa do balcão</p>
+      <img class="marca__logo" src="img/logo.svg" alt="" width="56" height="56">
+      <div>
+        <h1>Bar João &amp; Maria</h1>
+        <p>Caixa do balcão</p>
+      </div>
     </div>
 
     <button type="button" id="btn-caderneta" class="btn btn--claro">
@@ -19,6 +22,9 @@
       <span id="total-fiado" class="selo">R$ 0,00</span>
     </button>
   </header>
+
+  <!-- Faixa decorativa: toldo listrado de mercadinho -->
+  <div class="toldo" aria-hidden="true"></div>
 
   <main class="layout">
 
@@ -30,7 +36,13 @@
 
     <!-- Comanda (carrinho) do pedido atual -->
     <aside id="comanda" class="comanda" aria-labelledby="titulo-comanda">
-      <h2 id="titulo-comanda">Comanda atual</h2>
+      <h2 id="titulo-comanda" class="comanda__titulo">
+        <span class="carrinho">
+          <img src="img/carrinho.svg" alt="" width="44" height="44">
+          <span id="qtd-itens" class="contagem" hidden>0</span>
+        </span>
+        Comanda atual
+      </h2>
 
       <ul id="lista-comanda" class="comanda__lista"></ul>
 
@@ -48,7 +60,13 @@
 
   <!-- Barra fixa que só aparece no celular -->
   <a class="barra-mobile" href="#comanda">
-    <span>Ver comanda</span>
+    <span class="barra-mobile__texto">
+      <span class="carrinho">
+        <img src="img/carrinho.svg" alt="" width="36" height="36">
+        <span id="qtd-barra" class="contagem" hidden>0</span>
+      </span>
+      Ver comanda
+    </span>
     <strong id="total-barra">R$ 0,00</strong>
   </a>
 
